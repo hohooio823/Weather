@@ -16,34 +16,42 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height:40,
+      height:200,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
-        boxShadow: [BoxShadow(
-          offset:Offset(0,10),
-          blurRadius: 50,
-        )]
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        ),
+        color: Colors.black,
       ),
-      child:Visibility(
-        child: TextField(
-              onChanged: (text)=>{
-                getWeather(text)
-                .then((value) =>{
-                  if(value!=null){
-                    for(var data in value['data']){
-                      setState(()=>city=data['city_name']+' '+data['temp'].toString()),
-                      widget.callback(data)
-                    }
-                  }
-                })
-              },
-            ),
-        maintainSize: true, 
-        maintainAnimation: true,
-        maintainState: true,
-        visible: true, 
-      ),
+      alignment: Alignment.center,
+      child:Padding(
+          padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+          child:Container(
+          height:35,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+            boxShadow: [BoxShadow(
+              offset:Offset(0,10),
+              blurRadius: 50,
+            )]
+              ),
+              child:TextField(
+                      onChanged: (text)=>{
+                        getWeather(text)
+                        .then((value) =>{
+                          if(value!=null){
+                            for(var data in value['data']){
+                              setState(()=>city=data['city_name']+' '+data['temp'].toString()),
+                              widget.callback(data)
+                            }
+                          }
+                        })
+                      },
+                    )
+            )
+      )
     );
   }
 }
