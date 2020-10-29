@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './Components/searchBar.dart';
+import 'Components/weatherCard.dart';
 
 class MyCustomForm extends StatefulWidget {
   @override
@@ -12,16 +13,22 @@ class _MyCustomFormState extends State<MyCustomForm> {
         setState(() {
           weatherForecast = newWeatherForecast;
         });
+        print(newWeatherForecast);
       }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+        ),
+        child:Column(
             children: <Widget>[
               SearchBar(callback),
-              Text(weatherForecast!=null?weatherForecast['temp'].toString():'')
+              weatherCard(weatherForecast!=null?weatherForecast:'')
             ],
-        ),
+          ),
+        )
     );
   }
 }

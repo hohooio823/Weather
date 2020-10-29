@@ -16,17 +16,14 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height:200,
-      decoration: BoxDecoration(
-        color: const Color(0xff7c94b6),
-      ),
+      height:175,
       alignment: Alignment.center,
       child:Padding(
-          padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
+          padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
           child:Container(
           height:40,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(5),
             color: Colors.white,
             boxShadow: [BoxShadow(
               offset:Offset(0,10),
@@ -36,7 +33,7 @@ class _SearchBarState extends State<SearchBar> {
               child:TextField(
                       decoration : InputDecoration(
                         border: InputBorder.none,
-                        contentPadding:EdgeInsets.fromLTRB(15, 0, 6, 5),
+                        contentPadding:EdgeInsets.fromLTRB(15, 0, 6, 7.5),
                         hintText: 'Enter your city name'
                       ),
                       cursorColor: Colors.white,
