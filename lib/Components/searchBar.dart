@@ -18,17 +18,13 @@ class _SearchBarState extends State<SearchBar> {
     return Container(
       height:200,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        ),
-        color: Colors.black,
+        color: const Color(0xff7c94b6),
       ),
       alignment: Alignment.center,
       child:Padding(
           padding: EdgeInsets.fromLTRB(12, 0, 12, 0),
           child:Container(
-          height:35,
+          height:40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.white,
@@ -38,6 +34,12 @@ class _SearchBarState extends State<SearchBar> {
             )]
               ),
               child:TextField(
+                      decoration : InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding:EdgeInsets.fromLTRB(15, 0, 6, 5),
+                        hintText: 'Enter your city name'
+                      ),
+                      cursorColor: Colors.white,
                       onChanged: (text)=>{
                         getWeather(text)
                         .then((value) =>{
