@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 
 class SearchBar extends StatefulWidget {
   Function(dynamic) callback;
@@ -31,12 +32,14 @@ class _SearchBarState extends State<SearchBar> {
             )]
               ),
               child:TextField(
+                      textAlignVertical: TextAlignVertical.center,
                       decoration : InputDecoration(
                         border: InputBorder.none,
-                        contentPadding:EdgeInsets.fromLTRB(15, 0, 6, 7.5),
+                        contentPadding: EdgeInsets.fromLTRB(16,0,16,6),
+                        suffixIcon: Icon(CupertinoIcons.search,size:20,color: Colors.blueGrey,),
                         hintText: 'Enter your city name'
                       ),
-                      cursorColor: Colors.white,
+                      cursorColor: Colors.grey,
                       onChanged: (text)=>{
                         getWeather(text)
                         .then((value) =>{

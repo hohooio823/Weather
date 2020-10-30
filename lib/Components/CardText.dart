@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class CardText extends StatefulWidget {
   String text;
   double fntSize;
+  
   CardText(this.text,[this.fntSize=14]);
   @override
   _CardTextState createState() => _CardTextState();
