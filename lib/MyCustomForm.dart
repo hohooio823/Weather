@@ -13,7 +13,6 @@ class _MyCustomFormState extends State<MyCustomForm> {
         setState(() {
           weatherForecast = newWeatherForecast;
         });
-        print(newWeatherForecast);
       }
   @override
   Widget build(BuildContext context) {

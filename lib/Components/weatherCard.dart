@@ -22,12 +22,12 @@ class _weatherCardState extends State<weatherCard> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                  Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children:[
-                    CardText(widget.weatherForecast['city_name']),
-                    CardText(widget.weatherForecast['temp'].round().toString()),
+                  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:[
+                    CardText(widget.weatherForecast['city_name'],30),
+                    CardText(widget.weatherForecast['temp'].round().toString(),35),
                   ],),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-                    CardText(widget.weatherForecast['weather']['description'])
+                    CardText(widget.weatherForecast['weather']['description'],)
                   ],),
                   Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
                     CardText(widget.weatherForecast['sunrise'].toString()),
