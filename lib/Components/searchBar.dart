@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import './getWeather.dart';
 
 class SearchBar extends StatefulWidget {
   Function(dynamic) callback;
@@ -42,13 +40,8 @@ class _SearchBarState extends State<SearchBar> {
                       cursorColor: Colors.grey,
                       onChanged: (text)=>{
                         getWeather(text)
-                        .then((value) =>{
-                          if(value!=null){
-                            for(var data in value['data']){
-                              setState(()=>city=data['city_name']+' '+data['temp'].toString()),
+                        .then((data) =>{
                               widget.callback(data)
-                            }
-                          }
                         })
                       },
                     )
@@ -58,7 +51,3 @@ class _SearchBarState extends State<SearchBar> {
   }
 }
 
-Future getWeather(city) async {
-  final response = await http.get('https://api.weatherbit.io/v2.0/current?city=$city&key=922b11ce5fcc43e7af7443f05679c20d');
-  return response.body!=''?json.decode(response.body):null;
-}

@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 
 class weatherCard extends StatefulWidget {
   dynamic weatherForecast;
-  weatherCard(this.weatherForecast);
+  Function(dynamic) saved;
+  weatherCard(this.weatherForecast,this.saved);
   @override
   _weatherCardState createState() => _weatherCardState();
 }
@@ -13,20 +14,22 @@ class _weatherCardState extends State<weatherCard> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.fromLTRB(12,0,12,0),
-      child:Container(
+      child:InkWell(
+        onDoubleTap:(){widget.saved(widget.weatherForecast['city_name']);},
+        child:Container(
             height:200,
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(25,10,25,20),
+              padding: EdgeInsets.fromLTRB(13,10,15,20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:[
                       CardText(widget.weatherForecast['city_name'],30),
-                      CardText(widget.weatherForecast['temp'].round().toString(),35),
+                      CardText(widget.weatherForecast['temp'].round().toString()+'°',35),
                     ],),
                     Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
                       CardText('   '+widget.weatherForecast['weather']['description'],null,weatherIcon(widget.weatherForecast['weather']['code'].toString()))
@@ -40,6 +43,7 @@ class _weatherCardState extends State<weatherCard> {
               ),
             ),
           )
+      )
     );
   }
 }
