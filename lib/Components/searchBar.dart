@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import './getWeather.dart';
 
 class SearchBar extends StatefulWidget {
   Function(dynamic) callback;
@@ -15,7 +14,7 @@ class _SearchBarState extends State<SearchBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height:175,
+      height:150,
       alignment: Alignment.center,
       child:Padding(
           padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
@@ -39,10 +38,9 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       cursorColor: Colors.grey,
                       onChanged: (text)=>{
-                        getWeather(text)
-                        .then((data) =>{
-                              widget.callback(data)
-                        })
+                        if(text!=''){
+                          widget.callback(text)
+                        }
                       },
                     )
             )
