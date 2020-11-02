@@ -3,6 +3,8 @@ import './Components/searchBar.dart';
 import 'Components/weatherCard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import './Components/getWeather.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 List<String> cities=[];
 List<String> savedCities=[];
 class MyCustomForm extends StatefulWidget {
@@ -10,6 +12,17 @@ class MyCustomForm extends StatefulWidget {
   _MyCustomFormState createState() => _MyCustomFormState();
 }
 class _MyCustomFormState extends State<MyCustomForm> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  @override
+  void initState(){
+    super.initState();
+    _prefs.then((SharedPreferences prefs) {
+        setState((){
+          savedCities = prefs.getStringList('savedCities');
+          cities.addAll(savedCities);
+        });
+      });
+  }
   callback(searchCity) {
         if(!cities.contains(searchCity)){
           setState(() {
@@ -19,7 +32,8 @@ class _MyCustomFormState extends State<MyCustomForm> {
           });
         }
   }
-  saved(city){
+  saved(city) async {
+    final SharedPreferences prefs = await _prefs;
     if(!cities.contains(city)){
       setState(() {
         cities.add(city);
@@ -31,12 +45,15 @@ class _MyCustomFormState extends State<MyCustomForm> {
     }else{
       setState(() {
         cities.remove(city);
+        savedCities.remove(city);
       });
       Fluttertoast.showToast(
         msg: "Removed $city from the saved list."
       );
     }
-    print(cities);
+    setState(() {
+      prefs.setStringList("savedCities", savedCities);
+    });
   }
   @override
   Widget build(BuildContext context) {
