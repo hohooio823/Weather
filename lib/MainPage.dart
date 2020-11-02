@@ -7,11 +7,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 List<String> cities=[];
 List<String> savedCities=[];
-class MyCustomForm extends StatefulWidget {
+class MainPage extends StatefulWidget {
   @override
-  _MyCustomFormState createState() => _MyCustomFormState();
+  _MainPageState createState() => _MainPageState();
 }
-class _MyCustomFormState extends State<MyCustomForm> {
+class _MainPageState extends State<MainPage> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   @override
   void initState(){
@@ -60,7 +60,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.black,
+          color:Color(0xff10103a),
         ),
         child:Column(
             children: <Widget>[
@@ -75,7 +75,7 @@ class _MyCustomFormState extends State<MyCustomForm> {
                       builder: (context, AsyncSnapshot snapshot){
                         if (!snapshot.hasData) {
                           print(snapshot);
-                          return Text('There is an issue');
+                          return Text('');
                       } else {
                         return Padding(
                           padding: EdgeInsets.fromLTRB(0,9,0,9),

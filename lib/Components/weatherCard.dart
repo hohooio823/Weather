@@ -23,7 +23,7 @@ class _weatherCardState extends State<weatherCard> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(
-              padding: EdgeInsets.fromLTRB(13,10,15,20),
+              padding: EdgeInsets.fromLTRB(0,10,0,20),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[

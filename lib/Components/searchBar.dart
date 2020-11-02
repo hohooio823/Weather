@@ -23,10 +23,6 @@ class _SearchBarState extends State<SearchBar> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Colors.white,
-            boxShadow: [BoxShadow(
-              offset:Offset(0,10),
-              blurRadius: 50,
-            )]
               ),
               child:TextField(
                       textAlignVertical: TextAlignVertical.center,
