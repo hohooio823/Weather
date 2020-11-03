@@ -1,2 +1,2 @@
-- name: Flutter action
+  name: Flutter action
   uses: subosito/flutter-action@v1.4.0
