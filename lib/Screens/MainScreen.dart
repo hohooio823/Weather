@@ -1,13 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
+import './SingleCityScreen.dart';
+
+import '../Models/City.dart';
+/*import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Widgets/searchBar.dart';
 import '../Widgets/weatherCard.dart';
 import '../Widgets/getWeather.dart';
+*/
 
+class MainScreen extends StatefulWidget {
+  const MainScreen({ Key? key }) : super(key: key);
 
-List<String> cities=[];
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(child: SingleCityScreen(City(name: 'Blida',degree: 26,weather: 'Rainy')),),
+    );
+  }
+}
+
+/*List<String> cities=[];
 List<String> savedCities=[];
 class MainPage extends StatefulWidget {
   @override
@@ -93,4 +113,4 @@ class _MainPageState extends State<MainPage> {
         )
     );
   }
-}
+}*/
