@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import './Components/searchBar.dart';
-import 'Components/weatherCard.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import './Components/getWeather.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import './Widgets/searchBar.dart';
+import './Widgets/weatherCard.dart';
+import './Widgets/getWeather.dart';
+
 
 List<String> cities=[];
 List<String> savedCities=[];
