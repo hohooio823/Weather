@@ -4,7 +4,7 @@ class CardText extends StatefulWidget {
   String text;
   double fntSize;
   IconData icon;
-  CardText(this.text,[this.fntSize=14,this.icon=null]);
+  CardText(this.text,[this.fntSize=14,this.icon]);
   @override
   _CardTextState createState() => _CardTextState();
 }

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import './CardText.dart';
 import 'package:flutter/cupertino.dart';
 
-class weatherCard extends StatefulWidget {
+class WeatherCard extends StatefulWidget {
   dynamic weatherForecast;
   Function(dynamic) saved;
-  weatherCard(this.weatherForecast,this.saved);
+  WeatherCard(this.weatherForecast,this.saved);
   @override
-  _weatherCardState createState() => _weatherCardState();
+  _WeatherCardState createState() => _WeatherCardState();
 }
-class _weatherCardState extends State<weatherCard> {
+class _WeatherCardState extends State<WeatherCard> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -47,8 +47,8 @@ class _weatherCardState extends State<weatherCard> {
     );
   }
 }
-IconData weatherIcon (Weather){
-  switch(Weather[0]) { 
+IconData weatherIcon (weather){
+  switch(weather[0]) { 
     case '2': { 
       return CupertinoIcons.cloud_bolt_rain; 
     } 
@@ -75,9 +75,9 @@ IconData weatherIcon (Weather){
     break; 
 
     case '8': {
-      if(Weather[2]=='0'){
+      if(weather[2]=='0'){
         return CupertinoIcons.sun_max;
-      }else if(Weather[2]=='4'){
+      }else if(weather[2]=='4'){
         return CupertinoIcons.cloud;
       }else{
         return CupertinoIcons.cloud_sun;

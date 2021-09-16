@@ -79,7 +79,7 @@ class _MainPageState extends State<MainPage> {
                       } else {
                         return Padding(
                           padding: EdgeInsets.fromLTRB(0,9,0,9),
-                          child: weatherCard(snapshot.data,saved),
+                          child: WeatherCard(snapshot.data,saved),
                         );
                       }
                       }
