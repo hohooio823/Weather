@@ -11,7 +11,18 @@ class SingleCityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text(city.name),
+      child: Column(
+        children: [
+          Text(city.name),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Text(city.degree.toString()),
+              Text(city.weather)
+            ],
+          )
+        ],
+      ),
     );
   }
 }
