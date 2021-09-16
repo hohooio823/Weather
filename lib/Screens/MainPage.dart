@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import './Widgets/searchBar.dart';
-import './Widgets/weatherCard.dart';
-import './Widgets/getWeather.dart';
+import '../Widgets/searchBar.dart';
+import '../Widgets/weatherCard.dart';
+import '../Widgets/getWeather.dart';
 
 
 List<String> cities=[];

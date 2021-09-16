@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'MainPage.dart';
+import './Screens/MainPage.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -7,7 +7,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Retrieve Text Input',
-      home: MainPage(),
+      initialRoute: '/',
+      routes: {
+        '/':(ctx)=>MainPage()
+      },
     );
   }
 }
