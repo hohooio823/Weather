@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:weather/Models/City.dart';
 
 import './SingleCityScreen.dart';
+import './AddCitiesScreen.dart';
+
+import 'package:weather/Models/City.dart';
+
 class SavedCitiesScreen extends StatelessWidget {
 
   Future<dynamic> showCityScreen(BuildContext context,City city){
@@ -13,19 +16,51 @@ class SavedCitiesScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            width: double.infinity,
-            height: 100,
-            child: GestureDetector(
-              child: Card(
-              child: Text('NYC'),
-            ),
-            onTap: ()=>showCityScreen(context,City(name: "NYC", weather: "Freezing", degree: -14)),
-            ),
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children:[
+            Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Container(
+                width: double.infinity,
+                height: 100,
+                child: GestureDetector(
+                  child: Card(
+                  child: Text('NYC'),
+                ),
+                onTap: ()=>showCityScreen(context,City(name: "NYC", weather: "Freezing", degree: -14)),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 100,
+                child: GestureDetector(
+                  child: Card(
+                  child: Text('NYC'),
+                ),
+                onTap: ()=>showCityScreen(context,City(name: "NYC", weather: "Freezing", degree: -14)),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 100,
+                child: GestureDetector(
+                  child: Card(
+                  child: Text('NYC'),
+                ),
+                onTap: ()=>showCityScreen(context,City(name: "NYC", weather: "Freezing", degree: -14)),
+                ),
+              )
+            ],
           ),
-        ],
+          Padding(
+            padding: EdgeInsets.all(10),child: FloatingActionButton(child:Text('+'),
+            onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Scaffold(appBar:AppBar(),body: AddCitiesScreen(),)));
+            }))
+            ,
+        ]
       ),
     );
   }
