@@ -11,6 +11,22 @@ class SavedCitiesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Container(
+            width: double.infinity,
+            height: 100,
+            child: GestureDetector(
+              child: Card(
+              child: Text('NYC'),
+            ),
+            onTap: ()=>showCityScreen(context,City(name: "NYC", weather: "Freezing", degree: -14)),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
