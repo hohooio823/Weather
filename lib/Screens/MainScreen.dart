@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './SingleCityScreen.dart';
+import './SavedCitiesScreen.dart';
 
 import '../Models/City.dart';
 /*import 'package:fluttertoast/fluttertoast.dart';
@@ -19,10 +20,36 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+
+  final List<Widget> _pages = [SingleCityScreen(City(name: 'Blida',degree: 26,weather: 'Rainy'))
+  ,SavedCitiesScreen(),
+  ];
+  int _selectedPageIndex = 0;
+
+  void _selectPage(int index) {
+    setState(() {
+      _selectedPageIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: SingleCityScreen(City(name: 'Blida',degree: 26,weather: 'Rainy')),),
+      body: SafeArea(child: _pages[_selectedPageIndex],),
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: _selectPage,
+        currentIndex: _selectedPageIndex,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.star),
+            label: 'Favorites',
+          ),
+        ],
+      ),
     );
   }
 }
