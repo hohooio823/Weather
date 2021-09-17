@@ -13,16 +13,14 @@ import '../Widgets/getWeather.dart';
 */
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({ Key? key }) : super(key: key);
-
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-
-  final List<Widget> _pages = [SingleCityScreen(City(name: 'Blida',degree: 26,weather: 'Rainy'))
-  ,SavedCitiesScreen(),
+  final List<Widget> _pages = [
+    SingleCityScreen(City(name: 'Blida', degree: 26, weather: 'Rainy')),
+    SavedCitiesScreen(),
   ];
   int _selectedPageIndex = 0;
 
@@ -35,7 +33,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: _pages[_selectedPageIndex],),
+      body: SafeArea(child: _pages[_selectedPageIndex]),
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
         currentIndex: _selectedPageIndex,
