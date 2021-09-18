@@ -4,6 +4,7 @@ import './SingleCityScreen.dart';
 import './AddCitiesScreen.dart';
 
 import 'package:weather/Models/City.dart';
+import '../Widgets/WeatherCard.dart';
 
 class SavedCitiesScreen extends StatefulWidget {
   @override
@@ -19,7 +20,7 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
                 City(name: "NYC", weather: "Freezing", degree: -14)))));
   }
 
-  List<String> cities = [];
+  List<String> cities = [;
 
   @override
   Widget build(BuildContext context) {
@@ -30,11 +31,11 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
             itemCount: cities.length,
             itemBuilder: (ctx, index) {
               return (Container(
-                width: double.infinity,
+                margin: EdgeInsets.only(top: 15),
                 height: 100,
                 child: GestureDetector(
-                  child: Card(
-                    child: Text(cities[index]),
+                  child: WeatherCard(
+                    city: cities[index],
                   ),
                   onTap: () => showCityScreen(
                       context,

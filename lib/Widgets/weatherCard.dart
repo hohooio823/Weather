@@ -1,94 +1,156 @@
 import 'package:flutter/material.dart';
-import './CardText.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class CardText extends StatelessWidget {
+  final String text;
+  final double fntSize;
+  IconData? icon;
+
+  CardText({required this.text, this.fntSize = 14, this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(children: <Widget>[
+      Icon(icon),
+      Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0.8,
+          fontSize: fntSize,
+        ),
+      ),
+    ]);
+  }
+}
+
+Future getWeather(String city) async {
+  final response = await http.get(Uri.parse(
+      'https://api.weatherbit.io/v2.0/current?city=$city&key=4a4c3a2bd5c941709d3dfffad83a5c04'));
+  var value = response.body != '' ? json.decode(response.body) : null;
+  if (value != null) {
+    return value['data'][0];
+  } else {
+    return null;
+  }
+}
 
 class WeatherCard extends StatefulWidget {
-  dynamic weatherForecast;
-  Function(dynamic) saved;
-  WeatherCard(this.weatherForecast,this.saved);
+  final String city;
+  WeatherCard({required this.city});
   @override
   _WeatherCardState createState() => _WeatherCardState();
 }
+
 class _WeatherCardState extends State<WeatherCard> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.fromLTRB(12,0,12,0),
-      child:InkWell(
-        onDoubleTap:(){widget.saved(widget.weatherForecast['city_name']);},
-        child:Container(
-            height:200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(0,10,0,20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children:[
-                        CardText(widget.weatherForecast['city_name'],30),
-                        CardText(widget.weatherForecast['temp'].round().toString()+'°',35),
-                    ],),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-                      CardText('   '+widget.weatherForecast['weather']['description'],null,weatherIcon(widget.weatherForecast['weather']['code'].toString()))
-                    ],),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
-                      CardText(' '+widget.weatherForecast['sunrise'].toString(),null,CupertinoIcons.sunrise),
-                      CardText(' '+widget.weatherForecast['sunset'].toString(),null,CupertinoIcons.sunset),
-                      CardText(' '+widget.weatherForecast['wind_spd'].round().toString()+' m/s',null,CupertinoIcons.wind),
-                    ],)
-                ],
-              ),
-            ),
-          )
-      )
-    );
+    return FutureBuilder(
+        future: getWeather(widget.city),
+        builder: (ctx, AsyncSnapshot snapshot) {
+          dynamic weatherForecast = snapshot.data;
+          return Padding(
+              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+              child: Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CardText(
+                          text: weatherForecast['city_name'],
+                          fntSize: 30,
+                        ),
+                        CardText(
+                          text:
+                              weatherForecast['temp'].round().toString() + '°',
+                          fntSize: 35,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CardText(
+                            text: '   ' +
+                                weatherForecast['weather']['description'],
+                            icon: weatherIcon(
+                                weatherForecast['weather']['code'].toString()))
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        CardText(
+                            text: ' ' + weatherForecast['sunrise'].toString(),
+                            icon: CupertinoIcons.sunrise),
+                        CardText(
+                            text: ' ' + weatherForecast['sunset'].toString(),
+                            icon: CupertinoIcons.sunset),
+                        CardText(
+                            text: ' ' +
+                                weatherForecast['wind_spd'].round().toString() +
+                                ' m/s',
+                            icon: CupertinoIcons.wind),
+                      ],
+                    )
+                  ],
+                ),
+              ));
+        });
   }
 }
-IconData weatherIcon (weather){
-  switch(weather[0]) { 
-    case '2': { 
-      return CupertinoIcons.cloud_bolt_rain; 
-    } 
-    break; 
 
-    case '3': { 
-      return CupertinoIcons.cloud_drizzle; 
-    } 
-    break; 
-
-    case '5': { 
-      return CupertinoIcons.cloud_rain; 
-    } 
-    break; 
-
-    case '6': { 
-      return CupertinoIcons.cloud_snow; 
-    } 
-    break; 
-
-    case '7': { 
-      return CupertinoIcons.smoke; 
-    } 
-    break; 
-
-    case '8': {
-      if(weather[2]=='0'){
-        return CupertinoIcons.sun_max;
-      }else if(weather[2]=='4'){
-        return CupertinoIcons.cloud;
-      }else{
-        return CupertinoIcons.cloud_sun;
+IconData weatherIcon(weather) {
+  switch (weather[0]) {
+    case '2':
+      {
+        return CupertinoIcons.cloud_bolt_rain;
       }
-    } 
-    break;
 
-    default: { 
-      return CupertinoIcons.sun_max;  
-    }
-    break; 
-  } 
+    case '3':
+      {
+        return CupertinoIcons.cloud_drizzle;
+      }
+
+    case '5':
+      {
+        return CupertinoIcons.cloud_rain;
+      }
+
+    case '6':
+      {
+        return CupertinoIcons.cloud_snow;
+      }
+
+    case '7':
+      {
+        return CupertinoIcons.smoke;
+      }
+
+    case '8':
+      {
+        if (weather[2] == '0') {
+          return CupertinoIcons.sun_max;
+        } else if (weather[2] == '4') {
+          return CupertinoIcons.cloud;
+        } else {
+          return CupertinoIcons.cloud_sun;
+        }
+      }
+
+    default:
+      {
+        return CupertinoIcons.sun_max;
+      }
+  }
 }
-//widget.weatherForecast['city_name']+ ' '+widget.weatherForecast['weather']['description']+ ' '+widget.weatherForecast['temp'].toString()+ ' '+widget.weatherForecast['sunrise'].toString()+ ' '+widget.weatherForecast['sunset'].toString()+ ' '+widget.weatherForecast['temp'].toString()+ ' '+widget.weatherForecast['sunrise'].toString()+ ' '+widget.weatherForecast['wind_spd'].toString()
