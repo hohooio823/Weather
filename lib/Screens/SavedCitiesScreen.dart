@@ -46,54 +46,71 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
       });
     }
 
+    void citiesAdd(city) {
+      cities.add(city);
+      _updateCityPreference();
+      shouldReload();
+    }
+
+    void citiesRemove(city) {
+      cities.remove(city);
+      _updateCityPreference();
+      shouldReload();
+    }
+
+    print(cities);
     return FutureBuilder(
         future: _future,
         builder: (ctx, AsyncSnapshot snapshot) {
-          print(snapshot.data);
-          return Container(
-            width: double.infinity,
-            child: Stack(children: [
-              ListView.builder(
-                  itemCount: snapshot.data.length,
-                  itemBuilder: (ctx, index) {
-                    return (Container(
-                      margin: EdgeInsets.only(top: 15),
-                      height: 100,
-                      child: GestureDetector(
-                        child: WeatherCard(
-                          city: snapshot.data[index],
+          if (snapshot.hasData) {
+            return Container(
+              width: double.infinity,
+              child: Stack(children: [
+                ListView.builder(
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (ctx, index) {
+                      return (Container(
+                        margin: EdgeInsets.only(top: 15),
+                        height: 100,
+                        child: GestureDetector(
+                          child: WeatherCard(
+                            city: snapshot.data[index],
+                          ),
+                          onLongPress: () => citiesRemove(snapshot.data[index]),
+                          onTap: () => _showCityScreen(
+                              context,
+                              City(
+                                  name: snapshot.data[index],
+                                  weather: "Freezing",
+                                  degree: -14)),
                         ),
-                        onTap: () => _showCityScreen(
-                            context,
-                            City(
-                                name: snapshot.data[index],
-                                weather: "Freezing",
-                                degree: -14)),
-                      ),
-                    ));
-                  }),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Padding(
-                    padding: EdgeInsets.all(10),
-                    child: FloatingActionButton(
-                        child: Text('+'),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                                  builder: (ctx) => Scaffold(
-                                        appBar: AppBar(),
-                                        body: AddCitiesScreen(),
-                                      )))
-                              .then((data) {
-                            cities.add(data);
-                            _updateCityPreference();
-                            shouldReload();
-                          });
-                        })),
-              ),
-            ]),
-          );
+                      ));
+                    }),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: FloatingActionButton(
+                          child: Text('+'),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(
+                                    builder: (ctx) => Scaffold(
+                                          appBar: AppBar(),
+                                          body: AddCitiesScreen(),
+                                        )))
+                                .then((city) => citiesAdd(city));
+                          })),
+                ),
+              ]),
+            );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return Text("${snapshot.connectionState}");
+          }
         });
   }
 }

@@ -51,61 +51,70 @@ class _WeatherCardState extends State<WeatherCard> {
     return FutureBuilder(
         future: getWeather(widget.city),
         builder: (ctx, AsyncSnapshot snapshot) {
-          dynamic weatherForecast = snapshot.data;
-          return Padding(
-              padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        CardText(
-                          text: weatherForecast['city_name'],
-                          fntSize: 30,
-                        ),
-                        CardText(
-                          text:
-                              weatherForecast['temp'].round().toString() + '°',
-                          fntSize: 35,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CardText(
-                            text: '   ' +
-                                weatherForecast['weather']['description'],
-                            icon: weatherIcon(
-                                weatherForecast['weather']['code'].toString()))
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        CardText(
-                            text: ' ' + weatherForecast['sunrise'].toString(),
-                            icon: CupertinoIcons.sunrise),
-                        CardText(
-                            text: ' ' + weatherForecast['sunset'].toString(),
-                            icon: CupertinoIcons.sunset),
-                        CardText(
-                            text: ' ' +
-                                weatherForecast['wind_spd'].round().toString() +
-                                ' m/s',
-                            icon: CupertinoIcons.wind),
-                      ],
-                    )
-                  ],
-                ),
-              ));
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData) {
+            dynamic weatherForecast = snapshot.data;
+            return Padding(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                child: Container(
+                  height: 200,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: <Widget>[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CardText(
+                            text: weatherForecast['city_name'],
+                            fntSize: 30,
+                          ),
+                          CardText(
+                            text: weatherForecast['temp'].round().toString() +
+                                '°',
+                            fntSize: 35,
+                          ),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CardText(
+                              text: '   ' +
+                                  weatherForecast['weather']['description'],
+                              icon: weatherIcon(weatherForecast['weather']
+                                      ['code']
+                                  .toString()))
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          CardText(
+                              text: ' ' + weatherForecast['sunrise'].toString(),
+                              icon: CupertinoIcons.sunrise),
+                          CardText(
+                              text: ' ' + weatherForecast['sunset'].toString(),
+                              icon: CupertinoIcons.sunset),
+                          CardText(
+                              text: ' ' +
+                                  weatherForecast['wind_spd']
+                                      .round()
+                                      .toString() +
+                                  ' m/s',
+                              icon: CupertinoIcons.wind),
+                        ],
+                      )
+                    ],
+                  ),
+                ));
+          } else {
+            return Text('State: ${snapshot.connectionState}');
+          }
         });
   }
 }
