@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 
 import './SingleCityScreen.dart';
 import './AddCitiesScreen.dart';
@@ -12,7 +14,12 @@ class SavedCitiesScreen extends StatefulWidget {
 }
 
 class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
-  Future<dynamic> showCityScreen(BuildContext context, City city) {
+  _updateCityPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('cities', json.encode(cities));
+  }
+
+  Future<dynamic> _showCityScreen(BuildContext context, City city) {
     return Navigator.of(context).push(MaterialPageRoute(
         builder: (ctx) => Scaffold(
             appBar: AppBar(),
@@ -20,54 +27,73 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
                 City(name: "NYC", weather: "Freezing", degree: -14)))));
   }
 
-  List<String> cities = [;
+  List cities = [];
+  Future? _future;
+  Future fetchCities() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return String
+    String? citiesEncoded = prefs.getString('cities');
+    cities = jsonDecode(citiesEncoded!);
+    return cities;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Stack(children: [
-        ListView.builder(
-            itemCount: cities.length,
-            itemBuilder: (ctx, index) {
-              return (Container(
-                margin: EdgeInsets.only(top: 15),
-                height: 100,
-                child: GestureDetector(
-                  child: WeatherCard(
-                    city: cities[index],
-                  ),
-                  onTap: () => showCityScreen(
-                      context,
-                      City(
-                          name: cities[index],
-                          weather: "Freezing",
-                          degree: -14)),
-                ),
-              ));
-            }),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-              padding: EdgeInsets.all(10),
-              child: FloatingActionButton(
-                  child: Text('+'),
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(
-                            builder: (ctx) => Scaffold(
-                                  appBar: AppBar(),
-                                  body: AddCitiesScreen(),
-                                )))
-                        .then((data) {
-                      setState(() {
-                        cities.add(data);
-                      });
-                      print(cities);
-                    });
-                  })),
-        ),
-      ]),
-    );
+    _future = fetchCities();
+    void shouldReload() {
+      setState(() {
+        _future = fetchCities();
+      });
+    }
+
+    return FutureBuilder(
+        future: _future,
+        builder: (ctx, AsyncSnapshot snapshot) {
+          print(snapshot.data);
+          return Container(
+            width: double.infinity,
+            child: Stack(children: [
+              ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (ctx, index) {
+                    return (Container(
+                      margin: EdgeInsets.only(top: 15),
+                      height: 100,
+                      child: GestureDetector(
+                        child: WeatherCard(
+                          city: snapshot.data[index],
+                        ),
+                        onTap: () => _showCityScreen(
+                            context,
+                            City(
+                                name: snapshot.data[index],
+                                weather: "Freezing",
+                                degree: -14)),
+                      ),
+                    ));
+                  }),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: FloatingActionButton(
+                        child: Text('+'),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (ctx) => Scaffold(
+                                        appBar: AppBar(),
+                                        body: AddCitiesScreen(),
+                                      )))
+                              .then((data) {
+                            cities.add(data);
+                            _updateCityPreference();
+                            shouldReload();
+                          });
+                        })),
+              ),
+            ]),
+          );
+        });
   }
 }
