@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
-
-import './SingleCityScreen.dart';
-import './SavedCitiesScreen.dart';
-
-import '../Models/City.dart';
-/*import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Widgets/searchBar.dart';
-import '../Widgets/weatherCard.dart';
-import '../Widgets/getWeather.dart';
-*/
+import './AddCitiesScreen.dart';
+import './SingleCityScreen.dart';
+import './SavedCitiesScreen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -20,10 +13,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final List<Widget> _pages = [
-    SingleCityScreen(City(name: 'Blida', degree: 26, weather: 'Rainy')),
-    SavedCitiesScreen(),
-  ];
+  LocationData? _currentPosition;
+  String? _currentCity;
+  @override
+  void initState() {
+    _getCurrentLocation();
+    super.initState();
+  }
+
   int _selectedPageIndex = 0;
 
   void _selectPage(int index) {
@@ -32,15 +29,16 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
-  Position? _currentPosition;
-  String? _currentAddress;
-  @override
-  void initState() {
-    _getCurrentLocation();
-    super.initState();
-  }
-
+  void getCityPrefrence() {}
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      GestureDetector(
+          onTap: () {
+            addCityManually(true);
+          },
+          child: SingleCityScreen(_currentCity!)),
+      SavedCitiesScreen(),
+    ];
     return Scaffold(
       body: SafeArea(child: _pages[_selectedPageIndex]),
       bottomNavigationBar: BottomNavigationBar(
@@ -61,113 +59,89 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   _getCurrentLocation() async {
-    Position position = await Geolocator.getCurrentPosition();
-    setState(() {
-      _currentPosition = position;
-    });
-    _getAddressFromLatLng();
-    return position;
+    Location location = new Location();
+    bool _serviceEnabled;
+    PermissionStatus _permissionGranted;
+    _serviceEnabled = await location.serviceEnabled();
+    _permissionGranted = await location.hasPermission();
+    if (_serviceEnabled == true &&
+        _permissionGranted == PermissionStatus.granted) {
+      _addCityThroughLocation(location);
+    }
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        addCityManually();
+      } else {
+        _addCityThroughLocation(location);
+      }
+    }
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        addCityManually();
+      } else {
+        _addCityThroughLocation(location);
+      }
+    }
+    if (_permissionGranted == PermissionStatus.deniedForever) {
+      addCityManually();
+    }
   }
 
   _getAddressFromLatLng() async {
     try {
-      List<Placemark> placemarks = await placemarkFromCoordinates(
-          _currentPosition!.latitude, _currentPosition!.longitude);
-      Placemark place = placemarks[0];
-      print(place.locality);
+      List<geocoding.Placemark> placemarks =
+          await geocoding.placemarkFromCoordinates(
+              _currentPosition!.latitude!, _currentPosition!.longitude!);
+      geocoding.Placemark place = placemarks[0];
       setState(() {
-        _currentAddress = "${place.locality}";
+        _currentCity = "${place.locality}";
       });
     } catch (e) {
       print(e);
     }
-  }
-}
-
-/*List<String> cities=[];
-List<String> savedCities=[];
-class MainPage extends StatefulWidget {
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-class _MainPageState extends State<MainPage> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  @override
-  void initState(){
-    super.initState();
-    _prefs.then((SharedPreferences prefs) {
-        setState((){
-          savedCities = prefs.getStringList('savedCities');
-          cities.addAll(savedCities);
-        });
-      });
-  }
-  callback(searchCity) {
-        if(!cities.contains(searchCity)){
-          setState(() {
-            cities=[];
-            cities.addAll(savedCities);
-            cities.insert(0,searchCity);
-          });
-        }
-  }
-  saved(city) async {
-    final SharedPreferences prefs = await _prefs;
-    if(!cities.contains(city)){
-      setState(() {
-        cities.add(city);
-        savedCities.add(city);
-      });
-      Fluttertoast.showToast(
-        msg: "Added $city to the saved list."
-      );
-    }else{
-      setState(() {
-        cities.remove(city);
-        savedCities.remove(city);
-      });
-      Fluttertoast.showToast(
-        msg: "Removed $city from the saved list."
-      );
+    if (_currentCity != null) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('home', _currentCity!);
     }
+  }
+
+  addCityManually([bool editMode = false]) async {
+    String? city;
+    city = await _getCityPref();
+    if (city == null || editMode) {
+      Navigator.of(context)
+          .push(MaterialPageRoute(
+              builder: (ctx) => Scaffold(
+                    appBar: AppBar(),
+                    body: AddCitiesScreen(),
+                  )))
+          .then((city) => setState(() {
+                _currentCity = city;
+              }))
+          .then((_) async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('home', _currentCity!);
+      });
+    } else {
+      setState(() {
+        _currentCity = city;
+      });
+    }
+  }
+
+  _addCityThroughLocation(location) async {
+    LocationData position = await location.getLocation();
     setState(() {
-      prefs.setStringList("savedCities", savedCities);
+      _currentPosition = position;
     });
+    _getAddressFromLatLng();
   }
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          color:Color(0xff10103a),
-        ),
-        child:Column(
-            children: <Widget>[
-              SearchBar(callback),
-             Expanded(
-                child: ListView.builder(
-                  itemCount: cities.length,
-                  padding: EdgeInsets.fromLTRB(12,0,12,0),
-                  itemBuilder: (BuildContext ctxt, int index) {
-                    return FutureBuilder(
-                      future: getWeather(cities[index]),
-                      builder: (context, AsyncSnapshot snapshot){
-                        if (!snapshot.hasData) {
-                          print(snapshot);
-                          return Text('');
-                      } else {
-                        return Padding(
-                          padding: EdgeInsets.fromLTRB(0,9,0,9),
-                          child: WeatherCard(snapshot.data,saved),
-                        );
-                      }
-                      }
-                    );
-                  }
-              ))
-            ],
-          ),
-        )
-    );
+
+  _getCityPref() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? city = prefs.getString('home');
+    return city;
   }
-}}*/
+}

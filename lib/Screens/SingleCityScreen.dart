@@ -3,24 +3,20 @@ import 'package:flutter/material.dart';
 import '../Models/City.dart';
 
 class SingleCityScreen extends StatelessWidget {
-  
-  City city ;
+  String cityName;
 
-  SingleCityScreen(this.city);
-
+  SingleCityScreen(this.cityName);
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
         children: [
-          Text(city.name),
+          Text(cityName)
+          /*Text(city.name),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text(city.degree.toString()),
-              Text(city.weather)
-            ],
-          )
+            children: [Text(city.degree.toString()), Text(city.weather)],
+          )*/
         ],
       ),
     );

@@ -19,12 +19,10 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
     await prefs.setString('cities', json.encode(cities));
   }
 
-  Future<dynamic> _showCityScreen(BuildContext context, City city) {
+  Future<dynamic> _showCityScreen(BuildContext context, String city) {
     return Navigator.of(context).push(MaterialPageRoute(
-        builder: (ctx) => Scaffold(
-            appBar: AppBar(),
-            body: SingleCityScreen(
-                City(name: "NYC", weather: "Freezing", degree: -14)))));
+        builder: (ctx) =>
+            Scaffold(appBar: AppBar(), body: SingleCityScreen(city))));
   }
 
   List cities = [];
@@ -77,12 +75,8 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
                             city: snapshot.data[index],
                           ),
                           onLongPress: () => citiesRemove(snapshot.data[index]),
-                          onTap: () => _showCityScreen(
-                              context,
-                              City(
-                                  name: snapshot.data[index],
-                                  weather: "Freezing",
-                                  degree: -14)),
+                          onTap: () =>
+                              _showCityScreen(context, snapshot.data[index]),
                         ),
                       ));
                     }),
