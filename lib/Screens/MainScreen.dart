@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 
 import './SingleCityScreen.dart';
 import './SavedCitiesScreen.dart';
@@ -30,7 +32,14 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  Position? _currentPosition;
+  String? _currentAddress;
   @override
+  void initState() {
+    _getCurrentLocation();
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(child: _pages[_selectedPageIndex]),
@@ -49,6 +58,29 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
+  }
+
+  _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition();
+    setState(() {
+      _currentPosition = position;
+    });
+    _getAddressFromLatLng();
+    return position;
+  }
+
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+          _currentPosition!.latitude, _currentPosition!.longitude);
+      Placemark place = placemarks[0];
+      print(place.locality);
+      setState(() {
+        _currentAddress = "${place.locality}";
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 }
 
@@ -138,4 +170,4 @@ class _MainPageState extends State<MainPage> {
         )
     );
   }
-}*/
+}}*/
