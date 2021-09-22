@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/cupertino.dart';
 
 import './AddCitiesScreen.dart';
 import './SingleCityScreen.dart';
@@ -32,11 +33,10 @@ class _MainScreenState extends State<MainScreen> {
   void getCityPrefrence() {}
   Widget build(BuildContext context) {
     final List<Widget> _pages = [
-      GestureDetector(
-          onTap: () {
-            addCityManually(true);
-          },
-          child: SingleCityScreen(_currentCity!)),
+      _currentCity != null
+          ? SingleCityScreen(
+              cityName: _currentCity!, changeCity: addCityManually)
+          : Center(child: CircularProgressIndicator()),
       SavedCitiesScreen(),
     ];
     return Scaffold(
@@ -46,12 +46,12 @@ class _MainScreenState extends State<MainScreen> {
         currentIndex: _selectedPageIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(CupertinoIcons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.star),
-            label: 'Favorites',
+            icon: Icon(CupertinoIcons.globe),
+            label: 'Worldwide',
           ),
         ],
       ),
@@ -117,9 +117,11 @@ class _MainScreenState extends State<MainScreen> {
                     appBar: AppBar(),
                     body: AddCitiesScreen(),
                   )))
-          .then((city) => setState(() {
-                _currentCity = city;
-              }))
+          .then((city) => city != null
+              ? setState(() {
+                  _currentCity = city;
+                })
+              : null)
           .then((_) async {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('home', _currentCity!);

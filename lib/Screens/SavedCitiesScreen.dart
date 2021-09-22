@@ -5,7 +5,6 @@ import 'dart:convert';
 import './SingleCityScreen.dart';
 import './AddCitiesScreen.dart';
 
-import 'package:weather/Models/City.dart';
 import '../Widgets/WeatherCard.dart';
 
 class SavedCitiesScreen extends StatefulWidget {
@@ -21,8 +20,8 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
 
   Future<dynamic> _showCityScreen(BuildContext context, String city) {
     return Navigator.of(context).push(MaterialPageRoute(
-        builder: (ctx) =>
-            Scaffold(appBar: AppBar(), body: SingleCityScreen(city))));
+        builder: (ctx) => Scaffold(
+            appBar: AppBar(), body: SingleCityScreen(cityName: city))));
   }
 
   List cities = [];
@@ -61,43 +60,42 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
         future: _future,
         builder: (ctx, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            return Container(
-              width: double.infinity,
-              child: Stack(children: [
-                ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (ctx, index) {
-                      return (Container(
-                        margin: EdgeInsets.only(top: 15),
-                        height: 100,
-                        child: GestureDetector(
-                          child: WeatherCard(
-                            city: snapshot.data[index],
-                          ),
-                          onLongPress: () => citiesRemove(snapshot.data[index]),
-                          onTap: () =>
-                              _showCityScreen(context, snapshot.data[index]),
-                        ),
-                      ));
-                    }),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: Padding(
-                      padding: EdgeInsets.all(10),
-                      child: FloatingActionButton(
-                          child: Text('+'),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(
-                                    builder: (ctx) => Scaffold(
-                                          appBar: AppBar(),
-                                          body: AddCitiesScreen(),
-                                        )))
-                                .then((city) => citiesAdd(city));
-                          })),
-                ),
-              ]),
-            );
+            return snapshot.data.length == 0
+                ? Stack(children: [
+                    Center(child: Text('No city has been added yet!')),
+                    AddCityButton(
+                      citiesAdd: citiesAdd,
+                    )
+                  ])
+                : Container(
+                    width: double.infinity,
+                    child: Stack(children: [
+                      ListView.builder(
+                          itemCount: snapshot.data.length,
+                          itemBuilder: (ctx, index) {
+                            return (Container(
+                              margin:
+                                  EdgeInsets.only(top: 15, left: 10, right: 10),
+                              height: 150,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: GestureDetector(
+                                child: WeatherCard(
+                                  city: snapshot.data[index],
+                                ),
+                                onDoubleTap: () =>
+                                    citiesRemove(snapshot.data[index]),
+                                onTap: () => _showCityScreen(
+                                    context, snapshot.data[index]),
+                              ),
+                            ));
+                          }),
+                      AddCityButton(
+                        citiesAdd: citiesAdd,
+                      ),
+                    ]),
+                  );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
@@ -106,5 +104,30 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
             return Text("${snapshot.connectionState}");
           }
         });
+  }
+}
+
+class AddCityButton extends StatelessWidget {
+  final Function citiesAdd;
+  const AddCityButton({required this.citiesAdd});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Padding(
+          padding: EdgeInsets.all(10),
+          child: FloatingActionButton(
+              child: Text('+'),
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                        builder: (ctx) => Scaffold(
+                              appBar: AppBar(),
+                              body: AddCitiesScreen(),
+                            )))
+                    .then((city) => city != null ? citiesAdd(city) : null);
+              })),
+    );
   }
 }

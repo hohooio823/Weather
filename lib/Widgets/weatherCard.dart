@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:async';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:intl/intl.dart';
+
+import '../Models/WeatherForecast.dart';
+
+import '../Helpers/getWeather.dart';
 
 class CardText extends StatelessWidget {
   final String text;
   final double fntSize;
-  IconData? icon;
+  final IconData? icon;
 
   CardText({required this.text, this.fntSize = 14, this.icon});
 
@@ -27,25 +29,56 @@ class CardText extends StatelessWidget {
   }
 }
 
-Future getWeather(String city) async {
-  final response = await http.get(Uri.parse(
-      'https://api.weatherbit.io/v2.0/current?city=$city&key=4a4c3a2bd5c941709d3dfffad83a5c04'));
-  var value = response.body != '' ? json.decode(response.body) : null;
-  if (value != null) {
-    return value['data'][0];
-  } else {
-    return null;
-  }
-}
-
 class WeatherCard extends StatefulWidget {
   final String city;
-  WeatherCard({required this.city});
+  final bool isSingleCityScreen;
+  WeatherCard({
+    required this.city,
+    this.isSingleCityScreen = false,
+  });
   @override
   _WeatherCardState createState() => _WeatherCardState();
 }
 
 class _WeatherCardState extends State<WeatherCard> {
+  dynamic isSingleCityScreenHandler =
+      (widget, WeatherForecast weatherForecast) {
+    if (widget.isSingleCityScreen) {
+      return [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            CardText(text: DateFormat('EEEE').format(DateTime.now()).toString())
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CardText(
+                text: ' ${weatherForecast.weather}',
+                icon: weatherIcon(weatherForecast.code),
+                fntSize: 17.5,
+              )
+            ],
+          ),
+        )
+      ];
+    } else {
+      return [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CardText(
+              text: ' ${weatherForecast.weather}',
+              icon: weatherIcon(weatherForecast.code),
+            )
+          ],
+        )
+      ];
+    }
+  };
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -54,15 +87,10 @@ class _WeatherCardState extends State<WeatherCard> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasData) {
-            dynamic weatherForecast = snapshot.data;
+            WeatherForecast weatherForecast = snapshot.data;
             return Padding(
-                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
+                padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
@@ -70,42 +98,27 @@ class _WeatherCardState extends State<WeatherCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           CardText(
-                            text: weatherForecast['city_name'],
+                            text: weatherForecast.name,
                             fntSize: 30,
                           ),
                           CardText(
-                            text: weatherForecast['temp'].round().toString() +
-                                '°',
-                            fntSize: 35,
+                            text: '${weatherForecast.temperature}°',
+                            fntSize: 27.5,
                           ),
                         ],
                       ),
+                      ...isSingleCityScreenHandler(widget, weatherForecast),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           CardText(
-                              text: '   ' +
-                                  weatherForecast['weather']['description'],
-                              icon: weatherIcon(weatherForecast['weather']
-                                      ['code']
-                                  .toString()))
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          CardText(
-                              text: ' ' + weatherForecast['sunrise'].toString(),
+                              text: ' ${weatherForecast.sunrise}',
                               icon: CupertinoIcons.sunrise),
                           CardText(
-                              text: ' ' + weatherForecast['sunset'].toString(),
+                              text: ' ${weatherForecast.sunset}',
                               icon: CupertinoIcons.sunset),
                           CardText(
-                              text: ' ' +
-                                  weatherForecast['wind_spd']
-                                      .round()
-                                      .toString() +
-                                  ' m/s',
+                              text: ' ${weatherForecast.windSpeed} m/h',
                               icon: CupertinoIcons.wind),
                         ],
                       )
@@ -113,7 +126,7 @@ class _WeatherCardState extends State<WeatherCard> {
                   ),
                 ));
           } else {
-            return Text('State: ${snapshot.connectionState}');
+            return Text('There was an error!');
           }
         });
   }
