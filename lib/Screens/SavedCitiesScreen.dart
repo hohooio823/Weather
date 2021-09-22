@@ -20,8 +20,7 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
 
   Future<dynamic> _showCityScreen(BuildContext context, String city) {
     return Navigator.of(context).push(MaterialPageRoute(
-        builder: (ctx) => Scaffold(
-            appBar: AppBar(), body: SingleCityScreen(cityName: city))));
+        builder: (ctx) => Scaffold(body: SingleCityScreen(cityName: city))));
   }
 
   List cities = [];
@@ -55,7 +54,6 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
       shouldReload();
     }
 
-    print(cities);
     return FutureBuilder(
         future: _future,
         builder: (ctx, AsyncSnapshot snapshot) {
@@ -123,7 +121,6 @@ class AddCityButton extends StatelessWidget {
                 Navigator.of(context)
                     .push(MaterialPageRoute(
                         builder: (ctx) => Scaffold(
-                              appBar: AppBar(),
                               body: AddCitiesScreen(),
                             )))
                     .then((city) => city != null ? citiesAdd(city) : null);

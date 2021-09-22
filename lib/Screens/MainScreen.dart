@@ -114,7 +114,6 @@ class _MainScreenState extends State<MainScreen> {
       Navigator.of(context)
           .push(MaterialPageRoute(
               builder: (ctx) => Scaffold(
-                    appBar: AppBar(),
                     body: AddCitiesScreen(),
                   )))
           .then((city) => city != null
