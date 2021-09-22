@@ -85,7 +85,10 @@ class _WeatherCardState extends State<WeatherCard> {
         future: getWeather(widget.city),
         builder: (ctx, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            ));
           } else if (snapshot.hasData) {
             WeatherForecast weatherForecast = snapshot.data;
             return Padding(

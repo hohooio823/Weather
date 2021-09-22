@@ -5,7 +5,7 @@ import '../Models/WeatherForecast.dart';
 
 Future getWeather(String city) async {
   final response = await http.get(Uri.parse(
-      'https://api.weatherbit.io/v2.0/current?city=$city&key=922b11ce5fcc43e7af7443f05679c20d'));
+      'https://api.weatherbit.io/v2.0/current?city=$city&key=4a4c3a2bd5c941709d3dfffad83a5c04'));
   var value = response.body != '' ? json.decode(response.body) : null;
   if (value != null) {
     final data = value['data'][0];

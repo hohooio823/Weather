@@ -76,7 +76,9 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
                                   EdgeInsets.only(top: 15, left: 10, right: 10),
                               height: 150,
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
+                                  border: Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                   borderRadius: BorderRadius.circular(20)),
                               child: GestureDetector(
                                 child: WeatherCard(
@@ -96,7 +98,9 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
                   );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: Theme.of(context).primaryColor,
+              ),
             );
           } else {
             return Text("${snapshot.connectionState}");

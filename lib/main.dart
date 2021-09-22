@@ -19,7 +19,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Retrieve Text Input',
+      title: 'Weather',
+      theme: ThemeData(
+        primaryColor: Colors.black,
+        accentColor: Colors.white,
+      ),
       initialRoute: '/',
       routes: {'/': (ctx) => MainScreen()},
     );

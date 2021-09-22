@@ -22,7 +22,10 @@ class _SingleCityScreenState extends State<SingleCityScreen> {
         future: getWeather(widget.cityName),
         builder: (BuildContext ctx, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            ));
           } else if (snapshot.hasData) {
             WeatherForecast weatherForecast = snapshot.data;
             return Container(

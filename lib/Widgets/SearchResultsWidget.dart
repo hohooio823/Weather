@@ -26,10 +26,11 @@ class SearchResultsWidget extends StatelessWidget {
                     child: Container(
                         margin: EdgeInsets.symmetric(vertical: 2),
                         padding: EdgeInsets.all(10),
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColor,
                         child: Center(
                             child: Text(snapshot.data[index]['fullName'],
-                                style: TextStyle(color: Colors.white)))),
+                                style: TextStyle(
+                                    color: Theme.of(context).accentColor)))),
                   );
                 },
               );

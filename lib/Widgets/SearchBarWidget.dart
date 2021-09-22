@@ -11,8 +11,8 @@ class SearchBarWidget extends StatelessWidget {
         height: 40,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(5),
-          color: Colors.white,
-          border: Border.all(color: Colors.black),
+          color: Theme.of(context).accentColor,
+          border: Border.all(color: Theme.of(context).primaryColor),
         ),
         child: TextField(
           textAlignVertical: TextAlignVertical.center,
@@ -22,10 +22,10 @@ class SearchBarWidget extends StatelessWidget {
               suffixIcon: Icon(
                 Icons.search,
                 size: 20,
-                color: Colors.black,
+                color: Theme.of(context).primaryColor,
               ),
               hintText: 'Enter your city name'),
-          cursorColor: Colors.black,
+          cursorColor: Theme.of(context).primaryColor,
           onChanged: (text) {
             SearchBarHandler(text);
           },

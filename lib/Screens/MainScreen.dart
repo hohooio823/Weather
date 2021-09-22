@@ -36,12 +36,17 @@ class _MainScreenState extends State<MainScreen> {
       _currentCity != null
           ? SingleCityScreen(
               cityName: _currentCity!, changeCity: addCityManually)
-          : Center(child: CircularProgressIndicator()),
+          : Center(
+              child: CircularProgressIndicator(
+              color: Theme.of(context).primaryColor,
+            )),
       SavedCitiesScreen(),
     ];
+    _currentCity = 'blida';
     return Scaffold(
       body: SafeArea(child: _pages[_selectedPageIndex]),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Theme.of(context).primaryColor,
         onTap: _selectPage,
         currentIndex: _selectedPageIndex,
         items: [
