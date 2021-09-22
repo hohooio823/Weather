@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
+
 import 'Screens/MainScreen.dart';
-void main() => runApp(MyApp());
+import 'package:flutter/services.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  ///
+  /// Force the layout to Portrait mode
+  ///
+  await SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -8,10 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Retrieve Text Input',
       initialRoute: '/',
-      routes: {
-        '/':(ctx)=>MainScreen()
-      },
+      routes: {'/': (ctx) => MainScreen()},
     );
   }
 }
-
