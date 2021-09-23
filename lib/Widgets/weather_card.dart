@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-import '../Models/WeatherForecast.dart';
+import '../Models/weather_forecast.dart';
 
-import '../Helpers/getWeather.dart';
+import '../Helpers/get_weather.dart';
 
 class CardText extends StatelessWidget {
   final String text;

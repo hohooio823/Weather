@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../Helpers/getCityNames.dart';
+import '../Helpers/get_city_names.dart';
 
 class SearchResultsWidget extends StatelessWidget {
   const SearchResultsWidget({

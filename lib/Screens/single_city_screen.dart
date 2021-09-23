@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../Helpers/getWeather.dart';
+import '../Helpers/get_weather.dart';
 
-import '../Models/WeatherForecast.dart';
-import '../Widgets/WeatherCard.dart';
+import '../Models/weather_forecast.dart';
+import '../Widgets/weather_card.dart';
 
 class SingleCityScreen extends StatefulWidget {
   final String cityName;

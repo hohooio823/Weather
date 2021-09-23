@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../Widgets/BackButtonWidget.dart';
-import '../Widgets/SearchBarWidget.dart';
-import '../Widgets/SearchResultsWidget.dart';
+import '../Widgets/back_button_widget.dart';
+import '../Widgets/search_bar_widget.dart';
+import '../Widgets/search_results_widget.dart';
 
 class AddCitiesScreen extends StatefulWidget {
   @override

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import './SingleCityScreen.dart';
-import './AddCitiesScreen.dart';
+import 'single_city_screen.dart';
+import 'add_cities_screen.dart';
 import '../widgets/BackButtonWidget.dart';
-import '../Widgets/WeatherCard.dart';
+import '../Widgets/weather_card.dart';
 
 class SavedCitiesScreen extends StatefulWidget {
   @override

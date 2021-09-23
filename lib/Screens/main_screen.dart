@@ -4,9 +4,9 @@ import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/cupertino.dart';
 
-import './AddCitiesScreen.dart';
-import './SingleCityScreen.dart';
-import './SavedCitiesScreen.dart';
+import 'add_cities_screen.dart';
+import 'single_city_screen.dart';
+import 'saved_cities_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
