@@ -42,7 +42,6 @@ class _MainScreenState extends State<MainScreen> {
             )),
       SavedCitiesScreen(),
     ];
-    _currentCity = 'blida';
     return Scaffold(
       body: SafeArea(child: _pages[_selectedPageIndex]),
       bottomNavigationBar: BottomNavigationBar(

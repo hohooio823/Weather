@@ -129,7 +129,7 @@ class _WeatherCardState extends State<WeatherCard> {
                   ),
                 ));
           } else {
-            return Text('There was an error!');
+            return Center(child: Text('There was an error!'));
           }
         });
   }

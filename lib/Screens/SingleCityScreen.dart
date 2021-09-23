@@ -38,7 +38,7 @@ class _SingleCityScreenState extends State<SingleCityScreen> {
                           : null;
                     },
                     child: Container(
-                      height: 400,
+                      height: MediaQuery.of(context).size.height * 0.7,
                       child: WeatherCard(
                         city: weatherForecast.name,
                         isSingleCityScreen: true,
@@ -49,7 +49,7 @@ class _SingleCityScreenState extends State<SingleCityScreen> {
               ),
             );
           } else {
-            return Text('There was an error!');
+            return Center(child: Text('There was an error!'));
           }
         });
   }

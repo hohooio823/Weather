@@ -82,7 +82,7 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
                             return (Container(
                               margin:
                                   EdgeInsets.only(top: 15, left: 10, right: 10),
-                              height: 150,
+                              height: MediaQuery.of(context).size.height * 0.25,
                               decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Theme.of(context).primaryColor,
