@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import './SingleCityScreen.dart';
 import './AddCitiesScreen.dart';
-
+import '../widgets/BackButtonWidget.dart';
 import '../Widgets/WeatherCard.dart';
 
 class SavedCitiesScreen extends StatefulWidget {
@@ -20,7 +20,15 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
 
   Future<dynamic> _showCityScreen(BuildContext context, String city) {
     return Navigator.of(context).push(MaterialPageRoute(
-        builder: (ctx) => Scaffold(body: SingleCityScreen(cityName: city))));
+        builder: (ctx) => Scaffold(
+                body: SafeArea(
+              child: Column(
+                children: [
+                  BackButtonWidget(),
+                  SingleCityScreen(cityName: city),
+                ],
+              ),
+            ))));
   }
 
   List cities = [];
@@ -80,11 +88,11 @@ class _SavedCitiesScreenState extends State<SavedCitiesScreen> {
                                     color: Theme.of(context).primaryColor,
                                   ),
                                   borderRadius: BorderRadius.circular(20)),
-                              child: GestureDetector(
+                              child: InkWell(
                                 child: WeatherCard(
                                   city: snapshot.data[index],
                                 ),
-                                onDoubleTap: () =>
+                                onLongPress: () =>
                                     citiesRemove(snapshot.data[index]),
                                 onTap: () => _showCityScreen(
                                     context, snapshot.data[index]),

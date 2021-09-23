@@ -19,7 +19,7 @@ class SearchResultsWidget extends StatelessWidget {
               return ListView.builder(
                 itemCount: snapshot.data.length,
                 itemBuilder: (cotx, index) {
-                  return GestureDetector(
+                  return InkWell(
                     onTap: () {
                       Navigator.pop(context, snapshot.data[index]['name']);
                     },

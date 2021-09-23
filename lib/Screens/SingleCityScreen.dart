@@ -31,7 +31,7 @@ class _SingleCityScreenState extends State<SingleCityScreen> {
             return Container(
               child: Column(
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
                       widget.changeCity != null
                           ? widget.changeCity!(true)
